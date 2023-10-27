@@ -6,16 +6,18 @@ const clock = new Clock();
 let took = "";
 
 const worker = new Worker("./src/worker/worker.js", {
-    type 'module'
-})
+  type: "module",
+});
 
-worker.onmessage = (message) => {
-    console.log("recebi no processo da view", message)
-}
+worker.onmessage = ({ data }) => {
+  console.log("recebi no processo da view", data);
+};
 
-worker.postMessage("enviado do pai")
+worker.postMessage("enviado do pai");
 
 view.configureOnFileChange((file) => {
+  worker.postMessage({ file });
+
   clock.start((time) => {
     took = time;
     view.updateElapsedTime(`Process started ${time}`);

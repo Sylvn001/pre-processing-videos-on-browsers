@@ -1,4 +1,4 @@
-onmessage = (data) => {
-  console.log("recebido!!");
-  self.postMessage("hey from worker!!", data);
+onmessage = ({ data }) => {
+  console.log("recebido!!", data);
+  self.postMessage("hey from worker!!");
 };
