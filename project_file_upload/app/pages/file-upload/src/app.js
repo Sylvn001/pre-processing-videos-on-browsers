@@ -10,6 +10,9 @@ const worker = new Worker("./src/worker/worker.js", {
 });
 
 worker.onmessage = ({ data }) => {
+  if (data.status !== "done") return;
+  clock.stop();
+  views.updateElapsedTime(`Process took ${took.replace("ago", "")}`);
   console.log("recebi no processo da view", data);
 };
 
