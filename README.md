@@ -22,3 +22,7 @@
     2. no package.json apague todo o comando do `browser-sync` e substitua por `npx http-server .`
     3. agora o projeto vai estar executando na :8080 então vá no navegador e tente acessar o http://localhost:8080/
        A unica coisa, é que o projeto não vai reiniciar quando voce alterar algum código, vai precisar dar um F5 na página toda vez que alterar algo
+
+# Credits
+
+Projeto de estudo feito na semana de JS.Expert 08 do Erick Wendel.
