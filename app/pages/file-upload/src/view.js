@@ -6,32 +6,15 @@ export default class View {
   #txtfileName = document.getElementById("fileName");
   #fileUploadWrapper = document.getElementById("fileUploadWrapper");
   #elapsed = document.getElementById("elapsed");
+  /** @type {HTMLCanvasElement} */
   #canvas = document.getElementById("preview-144p");
 
   constructor() {
     this.configureBtnUploadClick();
   }
-
-  onChange(fn) {
-    return (e) => {
-      const file = e.target.files[0];
-      const { name, size } = file;
-      fn(file);
-      this.#txtfileName.innerText = name;
-      this.#fileSize.innerText = this.parseBytesIntoMBAndGB(size);
-
-      this.#fileInfo.classList.remove("hide");
-      this.#fileUploadWrapper.classList.add("hide");
-    };
+  getCanvas() {
+    return this.#canvas.transferControlToOffscreen();
   }
-
-  configureBtnUploadClick() {
-    this.#btnUploadVideo.addEventListener("click", () => {
-      // trigger file input
-      this.#fileUpload.click();
-    });
-  }
-
   parseBytesIntoMBAndGB(bytes) {
     const mb = bytes / (1024 * 1024);
     // if mb is greater than 1024, then convert to GB
@@ -41,12 +24,43 @@ export default class View {
     }
     return `${Math.round(mb)}MB`;
   }
+  configureBtnUploadClick() {
+    this.#btnUploadVideo.addEventListener("click", () => {
+      // trigger file input
+      this.#fileUpload.click();
+    });
+  }
+  onChange(fn) {
+    return (e) => {
+      const file = e.target.files[0];
+      const { name, size } = file;
+      fn(file);
+
+      this.#txtfileName.innerText = name;
+      this.#fileSize.innerText = this.parseBytesIntoMBAndGB(size);
+
+      this.#fileInfo.classList.remove("hide");
+      this.#fileUploadWrapper.classList.add("hide");
+    };
+  }
 
   updateElapsedTime(text) {
     this.#elapsed.innerText = text;
   }
-
   configureOnFileChange(fn) {
     this.#fileUpload.addEventListener("change", this.onChange(fn));
+  }
+
+  downloadBlobAsFile(buffers, filename) {
+    const blob = new Blob(buffers, { type: "video/webm" });
+    const blobUrl = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = filename;
+
+    a.click();
+
+    URL.revokeObjectURL(blobUrl);
   }
 }
