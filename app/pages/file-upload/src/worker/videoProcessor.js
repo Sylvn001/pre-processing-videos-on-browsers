@@ -183,6 +183,22 @@ export default class VideoProcessor {
       .pipeThrough(this.enconde144p(encoderConfig))
       .pipeThrough(this.renderDecodedFramesAndGetEncodedChunks(renderFrame))
       .pipeThrough(this.transformIntoWebM())
+      // .pipeThrough(
+      //     new TransformStream({
+      //         transform: ({ data, position }, controller) => {
+      //             this.#buffers.push(data)
+      //             controller.enqueue(data)
+      //         },
+      //         flush: () => {
+      //             // debugger
+      //             // sendMessage({
+      //             //     status: 'done',
+      //             //     buffers: this.#buffers,
+      //             //     filename: fileName.concat('-144p.webm')
+      //             // })
+      //         }
+      //     })
+      // )
       .pipeTo(this.upload(fileName, "144p", "webm"));
 
     sendMessage({

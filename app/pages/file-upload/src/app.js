@@ -38,6 +38,12 @@ view.configureOnFileChange((file) => {
 async function fakeFetch() {
   const filePath = "/videos/frag_bunny.mp4";
   const response = await fetch(filePath);
+  // traz o tamanho do arquivo!
+  // const response = await fetch(filePath, {
+  //     method: "HEAD"
+  // })
+  // response.headers.get('content-length')
+  // debugger
   const file = new File([await response.blob()], filePath, {
     type: "video/mp4",
     lastModified: Date.now(),
@@ -47,3 +53,5 @@ async function fakeFetch() {
 
   document.getElementById("fileUpload").dispatchEvent(event);
 }
+
+// fakeFetch()
